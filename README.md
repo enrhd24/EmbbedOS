@@ -1,5 +1,7 @@
+### Step by step RTOS for study embedded FW programming
 1. [arm-none-eabi-gdb](https://goobgood.tistory.com/31)
 2. [makefile](https://opensource.com/article/18/8/what-how-makefile)
+3. [make errer](https://doc.kldp.org/KoreanDoc/html/GNU-Make/GNU-Make-8.html)
 
 #### Compiler install
 - sudo apt install gcc-arm-none-eabi
