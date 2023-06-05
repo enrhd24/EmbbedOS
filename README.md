@@ -18,4 +18,4 @@
 - arm-none-eabi-gdb
     - target remote:1234
     - x/4x 0
-- make all
+- make all, debug
