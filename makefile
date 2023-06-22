@@ -1,43 +1,51 @@
-ARCH = armv7-a
-MCPU = cortex-a8
+#Main application file name
+MAIN_APP = test
+#Main hex file path in windows format
+MAIN_HEX_PATH = C:\test_avr\$(MAIN_APP).hex
 
-CC = arm-none-eabi-gcc
-AS = arm-none-eabi-as
-LD = arm-none-eabi-ld
-OC = arm-none-eabi-objcopy
+# Compiler and other Section
+CC = avr-gcc
+OBJCOPY = avr-objcopy.exe
+AVRDUDE := avrdude
 
-LINKER_SCRIPT = ./navilos.ld
-MAP_FILE = build/navilos.map
+#Options for avr-gcc
+CFLAGS = -g -Os -o
 
-ASM_SRCS = $(wildcard boot/*.c)
-ASM_OBJS = $(patsubst boot/%.c, build/%.os, $(C_SRCS))
+#Linking options for avr-gcc
+LFLAGS = -mmcu=atmega328p -o
 
-INC_DIRS = -I include
+#Options for HEX file generation
+HFLAGS = elf32-avr -O ihex
 
-navilos = build/navilos.axf
-navilos_bin = build/navilos.bin
+#Options for avrdude to burn the hex file
+#MMCU model here according to avrdude options
+DUDEFLAGS = -c
+DUDEFLAGS += arduino 
+DUDEFLAGS += -p
+DUDEFLAGS += m8  
+DUDEFLAGS += -P 
+DUDEFLAGS += COM4 
+DUDEFLAGS += -b 
+DUDEFLAGS += 19200 
+DUDEFLAGS += -U flash:w:$(MAIN_HEX_PATH):i
 
-.PHONY: all clean run debug gdb
+# Sources files needed for building the application 
+SRC = $(MAIN_APP).c
+SRC += 
 
-all: $(navilos)
+# The headers files needed for building the application
+INCLUDE = -g 
+INCLUDE += 
 
-clean:
-	@rm -fr build
+# commands Section
+Burn : Build
+	$(AVRDUDE) $(DUDEFLAGS)
 
-run: $(navilos)
-	qemu-system-arm -M realview-pb-a8 -kernel $(navilos)
-
-debug: $(navilos)
-	qemu-system-arm -M realview-pb-a8 -kernel $(navilos) -S -gdb tcp::1234,ipv
-
-gdb:
-	arm-none-eabi-gdb
-
-$(navilos): $(ASM_OBJS) $(C_OBJS) $(LINKER_SCRIPT)
-	$(LD) -n -T $(LINKER_SCRIPT) -o $(navilos) $(ASM_OBJS)
-			$(C_OBJS) -Map=$(MAP_FILE)
-	$(OC) -O binary $(navilos) $(navilos_bin)
-
-build/%.o: $(C_SRCS)
-	mkdir -p $(shell dirname $@)
-	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(INC_DIRS) -c -g -o $@ $<
+Build : $(MAIN_APP).elf
+	$(OBJCOPY) -I $(HFLAGS) $(MAIN_APP).elf $(MAIN_APP).hex
+	
+$(MAIN_APP).elf: $(MAIN_APP).o
+	$(CC) $(INCLUDE) $(LFLAGS)  $(SRC)  $@
+	
+$(MAIN_APP).o:$(SRC)
+	$(CC) $^ $(INCLUDE) $(CFLAGS) $@

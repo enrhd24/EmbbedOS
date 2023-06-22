@@ -1,3 +1,16 @@
+#### [[Test_AVR]참고자료](https://www.youtube.com/watch?v=LE7-uzhlGVM) 
+
+> ### vscode 
+> - Add folder to Workspace -> led_test_ws
+> - C/C++ exten -? ctrl+shift+p -> C/C++:Edit ... [Edit]
+
+#### [WinAVR](https://sourceforge.net/projects/winavr/files/)
+- 환경 변수 편집 -> 사용자변수 -> Path -> 편집 -> C:\cygwin64\bin
+#### [Cygwin](http://www.cygwin.com/)
+- .vscode -> c_cpp_p... -> "includePath":["C:\\WinAVR-20100110\\avr\\include"],
+
+---
+
 ### Step by step RTOS for study embedded FW programming
 1. [arm-none-eabi-gdb](https://goobgood.tistory.com/31)
 2. [makefile](https://opensource.com/article/18/8/what-how-makefile)

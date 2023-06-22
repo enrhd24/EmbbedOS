@@ -1,5 +1,6 @@
-/build/
-/.settings/language.settings.xml
-/.settings/org.eclipse.cdt.core.prefs
-/.settings/org.eclipse.cdt.ui.prefs
-*.settings.xml
+.vscode/
+led_test_ws.code-workspace
+
+test.elf
+test.hex
+test.o
