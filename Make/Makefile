@@ -1,15 +1,27 @@
 CC = g++
 CXXFLAGS = -Wall -O2
-OBJS = Ye.o Jin.o main.o
+LDFLAGS =
+INCLUDE = -I include/
+SRC_DIR = ./src
+OBJ_DIR = ./obj
+TARGET = main
+SRCS = $(notdir $(wildcard $(SRC_DIR)/*.c))
 
-%.o: %.c %.h
-	$(CC) $(CXXFLAGS) -c $<
+OBJS = $(SRCS:.c=.o)
+DEPS = $(SRCS:.c=.d)
 
-main : $(OBJS)
-	$(CC) $(CXXFLAGS) $(OBJS) -o main
+OBJECTS = $(patsubst %.o,$(OBJ_DIR)/%.o,$(OBJS))
+DEPS = $(OBJECTS:.o=.d)
 
-.PHONY: clean
+all: main
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cc
+	$(CC) $(CXXFLAGS) -c $< -o $@ -MD $(LDFLAGS)
+
+$(TARGET) : $(OBJECTS)
+	$(CC) $(CXXFLAGS) $(OBJECTS)-o $(TARGET) $(LDFLAGS)
+
+.PHONY: clean all
 clean:
-	rm -f $(OBJS) main
+	rm -f $(OBJECTS) $(DEPS) $(TARGET)
 
--include $(OBJS:.o=.d)
+-include $(DEPS)
