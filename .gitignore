@@ -1,6 +1,9 @@
 .vscode/
 led_test_ws.code-workspace
 
-test.elf
-test.hex
-test.o
+Make/Jin.h.gch
+Make/Ye.h.gch
+
+Make/Ye.o
+Make/Jin.o
+Make/main.o
